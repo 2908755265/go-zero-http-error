@@ -2,6 +2,8 @@ package go_zero_http_error
 
 import (
 	"encoding/json"
+	"errors"
+	"fmt"
 )
 
 type httpError struct {
@@ -34,6 +36,9 @@ func (e *httpError) CodeErr() (int, any) {
 }
 
 func NewError(code int, data any, err error) error {
+	if err == nil {
+		err = errors.New(fmt.Sprintf("err %d", code))
+	}
 	return &httpError{
 		e: err,
 		c: code,
