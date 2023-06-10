@@ -2,7 +2,6 @@ package go_zero_http_error
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
 )
@@ -13,11 +12,10 @@ func init() {
 		if ok {
 			return ce.CodeErr()
 		}
-		body, _ := json.Marshal(errResponse{
+		return http.StatusInternalServerError, errResponse{
 			Code: http.StatusInternalServerError,
 			Msg:  err.Error(),
 			Data: nil,
-		})
-		return http.StatusInternalServerError, body
+		}
 	})
 }

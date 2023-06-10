@@ -1,7 +1,6 @@
 package go_zero_http_error
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 )
@@ -13,9 +12,9 @@ type httpError struct {
 }
 
 type errResponse struct {
-	Code int
-	Msg  string
-	Data any
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+	Data any    `json:"data"`
 }
 
 type CodeError interface {
@@ -27,12 +26,11 @@ func (e *httpError) Error() string {
 }
 
 func (e *httpError) CodeErr() (int, any) {
-	body, _ := json.Marshal(errResponse{
+	return e.c, errResponse{
 		Code: e.c,
 		Msg:  e.Error(),
 		Data: e.d,
-	})
-	return e.c, body
+	}
 }
 
 func NewError(code int, data any, err error) error {
